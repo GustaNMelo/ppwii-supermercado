@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <th:block th:replace="~{/../fragments/head :: head('Usuários')}"></th:block>
+  <body>
+    <th:block th:replace="~{/../fragments/head :: header}"></th:block>
+    <div class="container">
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Usuários do Sistema</span>
+          <a th:href="@{/usuario/create}" class="btn btn-primary btn-sm">+ Novo Usuário</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Papéis</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.name}"></td>
+                <td th:text="${usuario.email}"></td>
+                <td>
+                  <span class="badge badge-green" th:each="role : ${usuario.roles}" th:text="${role}" style="margin-right:4px;"></span>
+                </td>
+                <td>
+                  <a th:href="@{/usuario/delete/{id}(id=${usuario.id})}"
+                     class="btn btn-danger btn-sm"
+                     onclick="return confirm('Deseja excluir este usuário?')">Excluir</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div th:if="${#lists.isEmpty(usuarios)}" class="empty-state">
+        Nenhum usuário cadastrado ainda.
+      </div>
+    </div>
+    <th:block th:replace="~{/../fragments/footer :: footer}"></th:block>
+  </body>
+</html>

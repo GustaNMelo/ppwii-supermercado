@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --green:    #1F7A4D;
+  --green-d:  #145C38;
+  --green-l:  #DCF2E4;
+  --sand:     #F4F8F5;
+  --bark:     #1B2E22;
+  --text-s:   #5C6B61;
+  --border:   #D7E5DB;
+  --shadow-m: 0 8px 32px rgba(27,46,34,.14);
+  --r:        12px;
+  --r-s:      8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: linear-gradient(135deg, var(--bark), var(--green-d), var(--green));
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.login-page-logo {
+  width: 260px;
+  max-width: 80vw;
+}
+
+.login-wrap {
+  background: white;
+  border-radius: var(--r);
+  box-shadow: var(--shadow-m);
+  padding: 40px 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bark);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.login-sub {
+  font-size: 13px;
+  color: var(--text-s);
+  margin-bottom: 26px;
+  text-align: center;
+}
+
+.field { display: flex; flex-direction: column; margin-bottom: 16px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--text-s); margin-bottom: 6px; }
+.field input {
+  padding: 10px 12px;
+  border-radius: var(--r-s);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  transition: 0.2s;
+  background: white;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-l);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: var(--r-s);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.btn-login:hover { background: var(--green-d); }
+
+.alert-error {
+  background: #FBE7E5;
+  color: #B3261E;
+  padding: 10px 14px;
+  border-radius: var(--r-s);
+  font-size: 13px;
+  margin-bottom: 18px;
+  border-left: 3px solid #B3261E;
+}
+
+.alert-logout {
+  background: var(--green-l);
+  color: var(--green-d);
+  padding: 10px 14px;
+  border-radius: var(--r-s);
+  font-size: 13px;
+  margin-bottom: 18px;
+  border-left: 3px solid var(--green);
+}
+
+.register-text {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--text-s);
+}
+.register-text a { color: var(--green); font-weight: 600; text-decoration: none; }
