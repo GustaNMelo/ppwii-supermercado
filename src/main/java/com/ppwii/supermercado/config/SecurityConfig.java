@@ -18,6 +18,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/home", "/login", "/css/**", "/images/**").permitAll()
                 .requestMatchers("/usuario/**").hasAuthority("Admin")
+                .requestMatchers("/categoria/create", "/categoria/edit/**", "/categoria/delete/**", "/categoria/save").hasAnyAuthority("Admin", "Gerente")
+                .requestMatchers("/categoria/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

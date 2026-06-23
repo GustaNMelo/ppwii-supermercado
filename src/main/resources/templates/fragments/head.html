@@ -16,6 +16,7 @@
 
   <div class="topbar-nav">
     <a th:href="@{/}">Início</a>
+    <a th:href="@{/categoria}">Categorias</a>
     <a sec:authorize="hasAuthority('Admin')" th:href="@{/usuario}">Usuários</a>
   </div>
 
