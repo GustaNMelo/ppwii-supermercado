@@ -20,6 +20,8 @@ public class SecurityConfig {
                 .requestMatchers("/usuario/**").hasAuthority("Admin")
                 .requestMatchers("/categoria/create", "/categoria/edit/**", "/categoria/delete/**", "/categoria/save").hasAnyAuthority("Admin", "Gerente")
                 .requestMatchers("/categoria/**").authenticated()
+                .requestMatchers("/fornecedor/create", "/fornecedor/edit/**", "/fornecedor/delete/**", "/fornecedor/save").hasAnyAuthority("Admin", "Gerente")
+                .requestMatchers("/fornecedor/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

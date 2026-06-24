@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments/head :: head('Fornecedores')}"></head>
+<body>
+<nav th:replace="~{fragments/head :: header()}"></nav>
+
+<div class="container">
+  <div class="table-card">
+    <div class="table-header">
+      <span class="table-title">Fornecedores</span>
+      <a sec:authorize="hasAnyAuthority('Admin','Gerente')"
+         th:href="@{/fornecedor/create}" class="btn btn-primary btn-sm">+ Novo Fornecedor</a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th sec:authorize="hasAnyAuthority('Admin','Gerente')">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="f : ${fornecedores}">
+            <td th:text="${f.id}"></td>
+            <td th:text="${f.nome}"></td>
+            <td th:text="${f.cnpj}"></td>
+            <td th:text="${f.email}"></td>
+            <td th:text="${f.telefone}"></td>
+            <td sec:authorize="hasAnyAuthority('Admin','Gerente')">
+              <a th:href="@{/fornecedor/edit/{id}(id=${f.id})}" class="btn btn-secondary btn-sm">Editar</a>
+              <a th:href="@{/fornecedor/delete/{id}(id=${f.id})}" class="btn btn-danger btn-sm"
+                 onclick="return confirm('Excluir este fornecedor?')">Excluir</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(fornecedores)}">
+            <td colspan="6">
+              <div class="empty-state">Nenhum fornecedor cadastrado.</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">Supermercado dos Operários &copy; 2025</footer>
+</body>
+</html>
