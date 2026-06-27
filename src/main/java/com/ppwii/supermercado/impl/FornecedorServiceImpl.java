@@ -34,4 +34,9 @@ public class FornecedorServiceImpl implements IFornecedorService {
     public void deleteFornecedorById(Integer id) {
         fornecedorRepository.deleteById(id);
     }
+
+    @Override
+    public List<Fornecedor> getFornecedoresByIds(List<Integer> ids) {
+        return fornecedorRepository.findAllById(ids);
+    }
 }

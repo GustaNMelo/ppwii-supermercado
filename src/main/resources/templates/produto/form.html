@@ -44,6 +44,20 @@
         </select>
       </div>
 
+      <div class="form-group">
+        <label>Fornecedores</label>
+        <div th:each="f : ${fornecedores}" class="form-check">
+          <input type="checkbox" class="form-check-input"
+                 name="fornecedorIds"
+                 th:value="${f.id}"
+                 th:checked="${produtoFornecedorIds.contains(f.id)}" />
+          <label th:text="${f.nome}"></label>
+        </div>
+        <div th:if="${#lists.isEmpty(fornecedores)}" style="font-size:13px; color: var(--text-s);">
+          Nenhum fornecedor cadastrado.
+        </div>
+      </div>
+
       <div style="display:flex; gap:10px; margin-top:8px;">
         <button type="submit" class="btn btn-primary">Salvar</button>
         <a th:href="@{/produto}" class="btn btn-secondary">Cancelar</a>

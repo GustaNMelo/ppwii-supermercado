@@ -23,6 +23,7 @@
             <th>Preço</th>
             <th>Categoria</th>
             <th>Descrição</th>
+            <th>Fornecedores</th>
             <th sec:authorize="hasAnyAuthority('Admin','Gerente')">Ações</th>
           </tr>
         </thead>
@@ -33,6 +34,11 @@
             <td th:text="'R$ ' + ${#numbers.formatDecimal(p.preco, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="${p.categoria != null ? p.categoria.nome : '-'}"></td>
             <td th:text="${p.descricao}"></td>
+            <td>
+              <span th:each="f, iter : ${p.fornecedores}"
+                    th:text="${f.nome + (iter.last ? '' : ', ')}"></span>
+              <span th:if="${p.fornecedores == null || p.fornecedores.isEmpty()}">-</span>
+            </td>
             <td sec:authorize="hasAnyAuthority('Admin','Gerente')">
               <a th:href="@{/produto/edit/{id}(id=${p.id})}" class="btn btn-secondary btn-sm">Editar</a>
               <a th:href="@{/produto/delete/{id}(id=${p.id})}" class="btn btn-danger btn-sm"

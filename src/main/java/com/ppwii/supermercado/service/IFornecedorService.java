@@ -9,4 +9,5 @@ public interface IFornecedorService {
     List<Fornecedor> getAllFornecedores();
     Fornecedor getFornecedorById(Integer id);
     void deleteFornecedorById(Integer id);
+    List<Fornecedor> getFornecedoresByIds(List<Integer> ids);
 }
