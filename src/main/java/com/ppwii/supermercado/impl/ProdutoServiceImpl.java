@@ -1,6 +1,7 @@
 package com.ppwii.supermercado.impl;
 
 import com.ppwii.supermercado.model.Produto;
+import com.ppwii.supermercado.repository.ItemVendaRepository;
 import com.ppwii.supermercado.repository.ProdutoRepository;
 import com.ppwii.supermercado.service.IProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class ProdutoServiceImpl implements IProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private ItemVendaRepository itemVendaRepository;
 
     @Override
     public Integer saveProduto(Produto produto) {
@@ -32,6 +36,10 @@ public class ProdutoServiceImpl implements IProdutoService {
 
     @Override
     public void deleteProdutoById(Integer id) {
+        Produto produto = getProdutoById(id);
+        if (itemVendaRepository.existsByProduto(produto)) {
+            throw new RuntimeException("Não é possível excluir este produto pois ele está associado a uma ou mais vendas.");
+        }
         produtoRepository.deleteById(id);
     }
 }

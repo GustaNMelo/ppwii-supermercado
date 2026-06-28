@@ -7,6 +7,7 @@
 <nav th:replace="~{fragments/head :: header()}"></nav>
 
 <div class="container">
+  <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
   <div class="table-card">
     <div class="table-header">
       <span class="table-title">Produtos</span>
@@ -39,14 +40,14 @@
                     th:text="${f.nome + (iter.last ? '' : ', ')}"></span>
               <span th:if="${p.fornecedores == null || p.fornecedores.isEmpty()}">-</span>
             </td>
-            <td sec:authorize="hasAnyAuthority('Admin','Gerente')">
+            <td sec:authorize="hasAnyAuthority('Admin','Gerente')" style="white-space: nowrap;">
               <a th:href="@{/produto/edit/{id}(id=${p.id})}" class="btn btn-secondary btn-sm">Editar</a>
               <a th:href="@{/produto/delete/{id}(id=${p.id})}" class="btn btn-danger btn-sm"
                  onclick="return confirm('Excluir este produto?')">Excluir</a>
             </td>
           </tr>
           <tr th:if="${#lists.isEmpty(produtos)}">
-            <td colspan="6">
+            <td colspan="7">
               <div class="empty-state">Nenhum produto cadastrado.</div>
             </td>
           </tr>

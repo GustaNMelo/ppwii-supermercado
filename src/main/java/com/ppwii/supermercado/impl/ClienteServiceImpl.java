@@ -2,6 +2,7 @@ package com.ppwii.supermercado.impl;
 
 import com.ppwii.supermercado.model.Cliente;
 import com.ppwii.supermercado.repository.ClienteRepository;
+import com.ppwii.supermercado.repository.VendaRepository;
 import com.ppwii.supermercado.service.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private VendaRepository vendaRepository;
 
     @Override
     public Integer saveCliente(Cliente cliente) {
@@ -32,6 +36,10 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public void deleteClienteById(Integer id) {
+        Cliente cliente = getClienteById(id);
+        if (vendaRepository.existsByCliente(cliente)) {
+            throw new RuntimeException("Não é possível excluir este cliente pois ele possui vendas associadas.");
+        }
         clienteRepository.deleteById(id);
     }
 }

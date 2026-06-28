@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments/head :: head('Vendas')}"></head>
+<body>
+<nav th:replace="~{fragments/head :: header()}"></nav>
+
+<div class="container">
+  <div class="table-card">
+    <div class="table-header">
+      <span class="table-title">Vendas</span>
+      <a th:href="@{/venda/create}" class="btn btn-primary btn-sm">+ Nova Venda</a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Operador</th>
+            <th>Total</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="v : ${vendas}">
+            <td th:text="${v.id}"></td>
+            <td th:text="${#temporals.format(v.data, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${v.cliente.nome}"></td>
+            <td th:text="${v.usuario.name}"></td>
+            <td th:text="'R$ ' + ${#numbers.formatDecimal(v.total, 1, 'POINT', 2, 'COMMA')}"></td>
+            <td>
+              <button type="button" class="btn btn-secondary btn-sm"
+                      th:attr="onclick='abrirItens(' + ${v.id} + ')'">Ver itens</button>
+              <a sec:authorize="hasAnyAuthority('Admin','Gerente')"
+                 th:href="@{/venda/delete/{id}(id=${v.id})}" class="btn btn-danger btn-sm"
+                 onclick="return confirm('Excluir esta venda?')">Excluir</a>
+
+              <!-- dados dos itens embutidos, ocultos -->
+              <div th:id="'itens-' + ${v.id}" style="display:none;">
+                <div th:each="item : ${v.itens}"
+                     th:attr="data-nome=${item.produto.nome},
+                               data-qtd=${item.quantidade},
+                               data-subtotal=${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(vendas)}">
+            <td colspan="6">
+              <div class="empty-state">Nenhuma venda registrada.</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:12px; box-shadow:0 8px 32px rgba(27,46,34,.2); padding:28px 32px; min-width:380px; max-width:560px; width:90%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <span id="modal-titulo" style="font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--bark);"></span>
+      <button onclick="fecharModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-s);">✕</button>
+    </div>
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th style="text-align:left; font-size:11px; text-transform:uppercase; color:var(--text-s); padding:8px 0; border-bottom:1px solid var(--border);">Produto</th>
+          <th style="text-align:center; font-size:11px; text-transform:uppercase; color:var(--text-s); padding:8px 0; border-bottom:1px solid var(--border);">Qtd</th>
+          <th style="text-align:right; font-size:11px; text-transform:uppercase; color:var(--text-s); padding:8px 0; border-bottom:1px solid var(--border);">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="modal-itens"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="footer">Supermercado dos Operários &copy; 2025</footer>
+
+<script>
+  function abrirItens(vendaId) {
+    const container = document.getElementById('itens-' + vendaId);
+    const divs = container.querySelectorAll('div');
+    const tbody = document.getElementById('modal-itens');
+    tbody.innerHTML = '';
+
+    divs.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;">${d.dataset.nome}</td>
+        <td style="padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; text-align:center;">${d.dataset.qtd}</td>
+        <td style="padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; text-align:right;">R$ ${d.dataset.subtotal}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('modal-titulo').textContent = 'Itens da Venda #' + vendaId;
+    const overlay = document.getElementById('modal-overlay');
+    overlay.style.display = 'flex';
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+  }
+
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) fecharModal();
+  });
+</script>
+</body>
+</html>

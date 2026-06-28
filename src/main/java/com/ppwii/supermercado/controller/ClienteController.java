@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ClienteController {
@@ -43,8 +44,12 @@ public class ClienteController {
     }
 
     @GetMapping("/cliente/delete/{id}")
-    public String deleteCliente(@PathVariable Integer id) {
-        clienteService.deleteClienteById(id);
+    public String deleteCliente(@PathVariable Integer id, RedirectAttributes redirect) {
+        try {
+            clienteService.deleteClienteById(id);
+        } catch (RuntimeException e) {
+            redirect.addFlashAttribute("erro", e.getMessage());
+        }
         return "redirect:/cliente";
     }
 }

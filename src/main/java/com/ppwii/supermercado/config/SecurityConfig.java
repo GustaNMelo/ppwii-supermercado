@@ -26,6 +26,8 @@ public class SecurityConfig {
                 .requestMatchers("/produto/**").authenticated()
                 .requestMatchers("/cliente/create", "/cliente/edit/**", "/cliente/delete/**", "/cliente/save").hasAnyAuthority("Admin", "Gerente")
                 .requestMatchers("/cliente/**").authenticated()
+                .requestMatchers("/venda/delete/**").hasAnyAuthority("Admin", "Gerente")
+                .requestMatchers("/venda/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

@@ -32,6 +32,10 @@ public class FornecedorServiceImpl implements IFornecedorService {
 
     @Override
     public void deleteFornecedorById(Integer id) {
+        Fornecedor fornecedor = getFornecedorById(id);
+        if (fornecedorRepository.existsInProduto(fornecedor)) {
+            throw new RuntimeException("Não é possível excluir este fornecedor pois ele está associado a um ou mais produtos.");
+        }
         fornecedorRepository.deleteById(id);
     }
 
