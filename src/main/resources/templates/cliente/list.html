@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments/head :: head('Clientes')}"></head>
+<body>
+<nav th:replace="~{fragments/head :: header()}"></nav>
+
+<div class="container">
+  <div class="table-card">
+    <div class="table-header">
+      <span class="table-title">Clientes</span>
+      <a sec:authorize="hasAnyAuthority('Admin','Gerente')"
+         th:href="@{/cliente/create}" class="btn btn-primary btn-sm">+ Novo Cliente</a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th sec:authorize="hasAnyAuthority('Admin','Gerente')">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="c : ${clientes}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.nome}"></td>
+            <td th:text="${c.cpf}"></td>
+            <td th:text="${c.email}"></td>
+            <td th:text="${c.telefone}"></td>
+            <td sec:authorize="hasAnyAuthority('Admin','Gerente')">
+              <a th:href="@{/cliente/edit/{id}(id=${c.id})}" class="btn btn-secondary btn-sm">Editar</a>
+              <a th:href="@{/cliente/delete/{id}(id=${c.id})}" class="btn btn-danger btn-sm"
+                 onclick="return confirm('Excluir este cliente?')">Excluir</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(clientes)}">
+            <td colspan="6">
+              <div class="empty-state">Nenhum cliente cadastrado.</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">Supermercado dos Operários &copy; 2025</footer>
+</body>
+</html>
